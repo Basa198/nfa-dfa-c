@@ -12,11 +12,12 @@ typedef struct {
   void (*delta)(int, char, int *buf);
 } NFA;
 
-bool check_nfa(NFA nfa, char *input);
-void epsilon_closure(NFA nfa, int states[MAX_STATES], int count, int *buf);
-void run_nfa(NFA nfa, char *input, int *buf);
-void print_nfa(NFA nfa);
-DFA to_dfa(NFA nfa);
-void free_nfa(NFA nfa);
+NFA* create_nfa(int initial_state, int accepting_states[], void (*delta)(int, char, int*));
+bool check_nfa(NFA *nfa, char *input);
+void epsilon_closure(NFA *nfa, int states[MAX_STATES], int count, int *buf);
+void run_nfa(NFA *nfa, char *input, int *buf);
+void print_nfa(NFA *nfa);
+DFA* to_dfa(NFA *nfa);
+void free_nfa(NFA *nfa);
 
 #endif

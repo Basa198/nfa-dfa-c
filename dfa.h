@@ -12,10 +12,11 @@ typedef struct {
   void (*delta)(int, char, int *buf);
 } DFA;
 
-bool check_dfa(DFA dfa, char *input);
-void run_dfa(DFA dfa, char *input, int *buf);
-void print_dfa(DFA dfa);
-NFA to_nfa(DFA dfa);
-void free_dfa(DFA dfa);
+DFA* create_dfa(int initial_state, int accepting_states[], void (*delta)(int, char, int*));
+bool check_dfa(DFA *dfa, char *input);
+void run_dfa(DFA *dfa, char *input, int *buf);
+void print_dfa(DFA *dfa);
+NFA* to_nfa(DFA *dfa);
+void free_dfa(DFA *dfa);
 
 #endif
