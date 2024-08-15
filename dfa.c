@@ -17,17 +17,15 @@ DFA* create_dfa(int initial_state, int accepting_states[], size_t num_states, vo
 }
 
 bool check_dfa(DFA *dfa, char *input) {
+  if (!dfa) return false;
   int res[MAX_STATES];
-  for (int i = 0; i < MAX_STATES; i++) res[i] = -1;
   run_dfa(dfa, input, res); 
-  for (int i = 0; i < MAX_STATES; i++) {
-    if (res[i] == -1) break;
-    if (dfa->accepting_states[res[i]]) return true;
-  }
-  return false;
+  if (res[0] == -1) return false;
+  else return dfa->accepting_states[res[0]];
 }
 
 void run_dfa(DFA *dfa, char *input, int *buf) {
+  if (!dfa) return;
   int cur_state[MAX_STATES]; 
   cur_state[0] = dfa->initial_state;
   for (int i = 0; input[i] != '\0'; i++) {
