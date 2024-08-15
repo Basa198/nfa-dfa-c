@@ -6,7 +6,9 @@
 #include "nfa.h"
 #include "config.h"
 
-typedef struct {
+struct NFA;
+
+typedef struct DFA {
   int initial_state;  
   int accepting_states[MAX_STATES];
   void (*delta)(int, char, int *buf);
@@ -16,7 +18,7 @@ DFA* create_dfa(int initial_state, int accepting_states[], void (*delta)(int, ch
 bool check_dfa(DFA *dfa, char *input);
 void run_dfa(DFA *dfa, char *input, int *buf);
 void print_dfa(DFA *dfa);
-NFA* to_nfa(DFA *dfa);
+struct NFA* to_nfa(DFA *dfa);
 void free_dfa(DFA *dfa);
 
 #endif

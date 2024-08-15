@@ -8,7 +8,7 @@
 
 // DFA for multiples of 3
 void mul3_delta(int state, char symbol, int *buf) {
-  if (strcmp(symbol, "0") == 0) {
+  if (symbol == '0') {
     switch (state) {
       case 0:
         buf[0] = 0;
@@ -23,7 +23,7 @@ void mul3_delta(int state, char symbol, int *buf) {
         buf[0] = -1;
         break;
     }
-  } else if (strcmp(symbol, "1") == 0) {
+  } else if (symbol == '1') {
     switch (state) {
       case 0:
         buf[0] = 1;
@@ -43,7 +43,7 @@ void mul3_delta(int state, char symbol, int *buf) {
 
 // nfa - fourth from last symbol has to be 1 
 void delta_nfa(int state, char symbol, int *buf) {
-  if (strcmp(symbol, "0") == 0) {
+  if (symbol == '0') {
     switch (state) {
       case 10:
         buf[0] = 10;
@@ -56,11 +56,12 @@ void delta_nfa(int state, char symbol, int *buf) {
         break;
       case 2:
         buf[0] = 3;
+        break;
       default:
         buf[0] = -1;
         break;
     }
-  } else if (strcmp(symbol, "1") == 0) {
+  } else if (symbol == '1') {
     switch (state) {
       case 10:
         buf[0] = 10;
@@ -84,7 +85,7 @@ void delta_nfa(int state, char symbol, int *buf) {
 
 // nfa with epsilon transitions - even number of 1s or 0s
 void delta_eps(int state, char symbol, int *buf) {
-  if (strcmp(symbol, "") == 0) {
+  if (!symbol) {
     switch (state) {
       case 0:
         buf[0] = 1;
@@ -94,7 +95,7 @@ void delta_eps(int state, char symbol, int *buf) {
         buf[0] = -1;
         break;
     }
-  } else if (strcmp(symbol, "0") == 0) {
+  } else if (symbol == '0') {
     switch (state) {
       case 1:
         buf[0] = 2;
@@ -110,7 +111,7 @@ void delta_eps(int state, char symbol, int *buf) {
         buf[0] = -1;
         break;
     }
-  } else if (strcmp(symbol, "1") == 0) {
+  } else if (symbol == '1') {
     switch (state) {
       case 1:
       case 2:
