@@ -11,7 +11,6 @@ struct DFA;
 typedef struct NFA {
   int initial_state;
   bool accepting_states[MAX_STATES];
-  size_t num_accepting_states;
   void (*delta)(int, char, int *buf);
 } NFA;
 

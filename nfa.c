@@ -37,7 +37,6 @@ NFA* create_nfa(int initial_state, int accepting_states[], size_t num_states, vo
   NFA *nfa = calloc(1, sizeof(NFA));
   if (!nfa) return NULL;
   nfa->initial_state = initial_state;
-  nfa->num_accepting_states = num_states;
   for (int i = 0; i < (int)num_states; i++) nfa->accepting_states[accepting_states[i]] = true;
   nfa->delta = delta;
   return nfa;
@@ -112,7 +111,6 @@ DFA* to_dfa(NFA *nfa) {
   dfa->initial_state = nfa->initial_state;
   dfa->delta = nfa->delta;
   dfa->transition = transition;
-  dfa->num_accepting_states = nfa->num_accepting_states;
   memcpy(dfa->accepting_states, nfa->accepting_states, MAX_STATES * sizeof(bool));
   return dfa;
 }

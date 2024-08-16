@@ -18,7 +18,6 @@ DFA* create_dfa(int initial_state, int accepting_states[], size_t num_states, vo
   for (int i = 0; i < (int)num_states; i++) dfa->accepting_states[accepting_states[i]] = true;
   dfa->delta = delta;
   dfa->transition = transition;
-  dfa->num_accepting_states = num_states;
   return dfa;
 }
 
@@ -53,4 +52,14 @@ void run_dfa(DFA *dfa, char *input, int *buf) {
     memcpy(cur_state, new_state, MAX_STATES * sizeof(int));
   }
   memcpy(buf, cur_state, MAX_STATES * sizeof(int));
+}
+
+NFA* to_nfa(DFA *dfa) {
+  if (!dfa) return NULL;
+  NFA *nfa = calloc(1, sizeof(NFA));
+  if (!nfa) return NULL;
+  nfa->initial_state = dfa->initial_state;
+  nfa->delta = dfa-> delta;
+  memcpy(nfa->accepting_states, dfa->accepting_states, MAX_STATES * sizeof(bool));
+  return nfa;
 }
