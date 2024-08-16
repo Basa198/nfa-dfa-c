@@ -150,6 +150,17 @@ int main() {
   assert(check_nfa(nfa, "10010010") == false);
   assert(check_nfa(nfa, "111") == false);
 
+  DFA *dfa = to_dfa(nfa);
+  assert(check_dfa(dfa, "") == false);
+  assert(check_dfa(dfa, "0000") == false);
+  assert(check_dfa(dfa, "1000") == true);
+  assert(check_dfa(dfa, "10001") == false);
+  assert(check_dfa(dfa, "11111") == true);
+  assert(check_dfa(dfa, "10111") == false);
+  assert(check_dfa(dfa, "000000001000") == true);
+  assert(check_dfa(dfa, "10010010") == false);
+  assert(check_dfa(dfa, "111") == false);
+
   NFA *nfa_epsilon = create_nfa(0, (int[]){1,3}, 2, delta_eps);
   assert(check_nfa(nfa_epsilon, "") == true);
   assert(check_nfa(nfa_epsilon, "1") == true);
@@ -165,6 +176,20 @@ int main() {
   assert(check_nfa(nfa_epsilon, "111111") == true);
   assert(check_nfa(nfa_epsilon, "111110") == false);
 
+  DFA *dfa_epsilon = to_dfa(nfa_epsilon);
+  assert(check_dfa(dfa_epsilon, "") == true);
+  assert(check_dfa(dfa_epsilon, "1") == true);
+  assert(check_dfa(dfa_epsilon, "0") == true);
+  assert(check_dfa(dfa_epsilon, "10") == false);
+  assert(check_dfa(dfa_epsilon, "1001") == true);
+  assert(check_dfa(dfa_epsilon, "100") == true);
+  assert(check_dfa(dfa_epsilon, "111000") == false);
+  assert(check_dfa(dfa_epsilon, "11001101") == false);
+  assert(check_dfa(dfa_epsilon, "1001") == true);
+  assert(check_dfa(dfa_epsilon, "1111000") == true);
+  assert(check_dfa(dfa_epsilon, "010101") == false);
+  assert(check_dfa(dfa_epsilon, "111111") == true);
+  assert(check_dfa(dfa_epsilon, "111110") == false);
 
   printf("All tests pass\n");
 }
