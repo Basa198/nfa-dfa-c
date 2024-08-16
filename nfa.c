@@ -6,6 +6,11 @@
 #include "nfa.h"
 #include "dfa.h"
 
+/*
+This function checks whether an integer array contains an element or not and returns a boolean value.
+Assumptions:
+- `arr` is at least of length `size`
+*/
 static bool contains(int *arr, size_t size, int val) {
   for (int i = 0; i < (int)size; i++) {
     if (arr[i] == val) return true;
@@ -13,7 +18,13 @@ static bool contains(int *arr, size_t size, int val) {
   return false;
 }
 
-static void transition(void (*delta)(int, char, int*), int* states, char symbol, int* buf) {
+/*
+This function serves as the transition function for a `DFA` type object when it's converted from an `NFA` type object.
+Assumptions:
+- `states` is `MAX_STATES` long and has `-1` at empty indices
+- `buf` can store `MAX_STATES` number of integers
+*/
+static void nfa_transition(void (*delta)(int, char, int*), int* states, char symbol, int* buf) {
   size_t c = 0;
   int res[MAX_STATES];
   for (int i = 0; i < MAX_STATES; i++) res[i] = -1;
@@ -32,6 +43,12 @@ static void transition(void (*delta)(int, char, int*), int* states, char symbol,
   epsilon_closure(delta, res, buf); 
 }
 
+/*
+This function creates an object of type `NFA` 
+Assumptions:
+- `num_states` is the size of `accepting_states[]`
+- `num_states` is less than `MAX_STATES`
+*/
 NFA* create_nfa(int initial_state, int accepting_states[], size_t num_states, void (*delta)(int, char, int*)) {
   if (num_states > MAX_STATES) return NULL;
   NFA *nfa = calloc(1, sizeof(NFA));
@@ -42,6 +59,10 @@ NFA* create_nfa(int initial_state, int accepting_states[], size_t num_states, vo
   return nfa;
 }
 
+/*
+This function determines whether the given non-deterministic automaton accepts an input
+Returns true if it accepts, false otherwise
+*/
 bool check_nfa(NFA *nfa, char *input) {
   if (!nfa) return false;
   int res[MAX_STATES];
@@ -53,16 +74,20 @@ bool check_nfa(NFA *nfa, char *input) {
   return false;
 }
 
+/*
+This function determines the epsilon closure [0] based on the delta function provided.
+The result will be written to `buf`.
+Assumptions:
+- `buf` can store `MAX_STATES` number of integers
+- `source_states[]` is `MAX_STATES` long and has `-1` value at empty indices
+*/
 void epsilon_closure(void (*delta)(int, char, int *buf), int source_states[], int *buf) {
   if (!delta) return;
   int states[MAX_STATES];
   int count = 0;
-  for (int i = 0; i < MAX_STATES; i++) {
-    if (source_states[i] == -1) {
-      count = i;
-      break;
-    }
-    states[i] = source_states[i];
+  while (source_states[count] != -1) {
+    states[count] = source_states[count]; 
+    count++;
   }
   for (int i = count; i < MAX_STATES; i++) states[i] = -1;
   
@@ -79,6 +104,12 @@ void epsilon_closure(void (*delta)(int, char, int *buf), int source_states[], in
   memcpy(buf, states, MAX_STATES * sizeof(int));
 }
 
+/*
+This function determines the possible end states for a non-deterministic automaton given an input
+The result is written to `buf`
+Assumptions:
+- `buf` can store `MAX_STATES` number of integers
+*/
 void run_nfa(NFA *nfa, char *input, int *buf) {
   if (!nfa) return;
   int cur_state[MAX_STATES];
@@ -104,13 +135,16 @@ void run_nfa(NFA *nfa, char *input, int *buf) {
   memcpy(buf, cur_state, MAX_STATES * sizeof(int)); 
 }
 
+/*
+This function converts a non-deterministic automaton to a deterministic automaton.
+*/
 DFA* to_dfa(NFA *nfa) {
   if (!nfa) return NULL;
   DFA *dfa = calloc(1, sizeof(DFA));
   if (!dfa) return NULL;
   dfa->initial_state = nfa->initial_state;
   dfa->delta = nfa->delta;
-  dfa->transition = transition;
+  dfa->transition = nfa_transition;
   memcpy(dfa->accepting_states, nfa->accepting_states, MAX_STATES * sizeof(bool));
   return dfa;
 }
