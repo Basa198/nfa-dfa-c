@@ -18,7 +18,6 @@ NFA* create_nfa(int initial_state, int accepting_states[], size_t num_states, vo
 bool check_nfa(NFA *nfa, char *input);
 void epsilon_closure(NFA *nfa, int source_states[], size_t count, int *buf);
 void run_nfa(NFA *nfa, char *input, int *buf);
-void print_nfa(NFA *nfa);
 struct DFA* to_dfa(NFA *nfa);
 
 #endif

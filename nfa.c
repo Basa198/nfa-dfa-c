@@ -69,10 +69,14 @@ void run_nfa(NFA *nfa, char *input, int *buf) {
       nfa->delta(cur_state[j], input[i], temp);
       for (int k = 0; k < MAX_STATES; k++) { // iterate over returned states
         if (temp[k] == -1) break;
-          if (!contains(new_state, size, temp[k])) new_state[size++] = temp[k];
-        }
+        if (!contains(new_state, size, temp[k])) new_state[size++] = temp[k];
+      }
     }
     epsilon_closure(nfa, new_state, size, cur_state);
   }
   memcpy(buf, cur_state, MAX_STATES * sizeof(int)); 
+}
+
+struct DFA* to_dfa(NFA *nfa) {
+
 }

@@ -1,0 +1,7 @@
+/*
+Write a wrapper around delta in create_dfa.
+Make delta signature: delta(int*, char, int*)
+first int* is the states array.
+With this layout you can have either 0 state at a time for dfa
+or multiple states at the same time for nfa to dfa
+*/
