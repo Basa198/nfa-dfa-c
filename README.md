@@ -4,6 +4,8 @@ Epsilon transitions are supported for all `NFA`s and those `DFA`s that have been
 
 `MAX_STATES` is the maximum number of states supported by an automaton. It is defined in `config.h` file.
 
+State labels must start with 0 and can go up to `MAX_STATES` for correct behavior.
+
 ## Run Tests
 
 ```Bash
