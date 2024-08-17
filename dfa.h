@@ -9,10 +9,10 @@
 struct NFA;
 
 typedef struct DFA {
-  int initial_state;  
-  bool accepting_states[MAX_STATES];
   void (*delta)(int, char, int *buf); 
   void (*transition)(void (*delta)(int, char, int *buf), int*, char, int*);
+  bool accepting_states[MAX_STATES];
+  int initial_state;  
 } DFA;
 
 DFA* create_dfa(int initial_state, int accepting_states[], size_t num_states, void (*delta)(int, char, int*));
