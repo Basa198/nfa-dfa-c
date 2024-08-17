@@ -66,7 +66,7 @@ Returns true if it accepts, false otherwise
 bool check_nfa(NFA *nfa, char *input) {
   if (!nfa) return false;
   int res[MAX_STATES];
-  run_nfa(nfa, input, res);
+  run_nfa(nfa, input, res); // returned res must have -1 at empty indices
   for (int i = 0; i < MAX_STATES; i++) {
     if (res[i] == -1) break;
     if (nfa->accepting_states[res[i]]) return true;
@@ -75,7 +75,7 @@ bool check_nfa(NFA *nfa, char *input) {
 }
 
 /*
-This function determines the epsilon closure [0] based on the delta function provided.
+This function determines the epsilon closure based on the delta function provided.
 The result will be written to `buf`.
 Assumptions:
 - `buf` can store `MAX_STATES` number of integers
@@ -90,7 +90,6 @@ void epsilon_closure(void (*delta)(int, char, int *buf), int source_states[], in
     count++;
   }
   for (int i = count; i < MAX_STATES; i++) states[i] = -1;
-  
   for (int i = 0; count < MAX_STATES && i < MAX_STATES; i++) {
     if (states[i] == -1) break;
     int new_state[MAX_STATES];

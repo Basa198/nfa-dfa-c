@@ -11,6 +11,7 @@ This is a transition function for a pure `DFA`. Meaning it was not converted fro
 Assumptions:
 - `cur_states` has `initial_state` at `0th` index
 - `buf` can store `MAX_STATES` number of integers
+- `buf` must have -1 at empty indices (this requirement comes from check_dfa)
 */
 static void transition(void (*delta)(int, char, int*), int* cur_states, char symbol, int* buf) {
   delta(cur_states[0], symbol, buf);
@@ -40,7 +41,7 @@ Returns true if it accepts, false otherwise
 bool check_dfa(DFA *dfa, char *input) {
   if (!dfa) return false;
   int res[MAX_STATES];
-  run_dfa(dfa, input, res); 
+  run_dfa(dfa, input, res); // returned res must have -1 at empty indices
   for (int i = 0; i < MAX_STATES; i++) {
     if (res[i] == -1) break;
     if (dfa->accepting_states[res[i]]) return true;
@@ -56,13 +57,12 @@ Assumptions:
 */
 void run_dfa(DFA *dfa, char *input, int *buf) {
   if (!dfa) return;
-  
   int cur_state[MAX_STATES]; 
   cur_state[0] = dfa->initial_state;
   for (int i = 1; i < MAX_STATES; i++) cur_state[i] = -1;
   if (strlen(input) == 0) {
     int temp[MAX_STATES];
-    for (int i = 0; i < MAX_STATES; i++) temp[i] = -1; // This is required for nfa_transition function
+    for (int i = 0; i < MAX_STATES; i++) temp[i] = -1; // see comment in check_dfa when calling run_dfa
     dfa->transition(dfa->delta, cur_state, '\0', temp);
     if (temp[0] == -1) memcpy(buf, cur_state, MAX_STATES * sizeof(int));
     else memcpy(buf, temp, MAX_STATES * sizeof(int));
@@ -70,6 +70,7 @@ void run_dfa(DFA *dfa, char *input, int *buf) {
   }
   for (int i = 0; input[i] != '\0'; i++) {
     int new_state[MAX_STATES];
+    for (int j = 0; j < MAX_STATES; j++) new_state[j] = -1;
     dfa->transition(dfa->delta, cur_state, input[i], new_state);
     memcpy(cur_state, new_state, MAX_STATES * sizeof(int));
   }
